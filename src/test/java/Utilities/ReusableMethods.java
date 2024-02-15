@@ -61,6 +61,9 @@ public class ReusableMethods {
     }
 
     public static void TestSums(){
+    historyPage.table.click();
+    Actions actions= new Actions(Driver.getDriver());
+    actions.sendKeys(Keys.END).perform();
     double expSum=0;
     HistoryPage historyPage = new HistoryPage();
             for (int i = 2; i < 9; i++) {
@@ -72,11 +75,12 @@ public class ReusableMethods {
                 }
                 String actSumStr = actSumElement.getText().replaceAll("[^\\d.]", "");
                 double actSum = Double.parseDouble(actSumStr);
-                System.out.println(i + " .column sums:" + expSum + " and " + actSum + " was seen as Grand Total");
+                System.out.println(i + " .column sums:" + expSum + " and " + actSum + " was not seen as Grand Total");
                 //actions.moveToElement(historyPage.nextButton).perform();
-                 // historyPage.nextButton.click();
+                // historyPage.nextButton.click();
                 softAssert.assertEquals(actSum, expSum);
             }
+        System.out.println("Actual result list also contains the sum of invisible values!");
         softAssert.assertAll();
     }
 

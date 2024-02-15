@@ -1,5 +1,5 @@
 Feature: Data Verification Task
-
+  @wip
   Scenario: The user verifies the monthly total amounts for the locations
   and the accuracy of the total values (grand total) in the History by Store menu.
 

@@ -78,8 +78,11 @@ public class testSteps<CSVWriter> {
     @Given("The user downland the CVS and verify that transaction types are on the correct column from the CVS")
     public void the_user_downland_the_cvs_and_verify_that_transaction_types_are_on_the_correct_column_from_the_cvs() throws FileNotFoundException {
 
+        ReusableMethods.scrollToElement(Driver.getDriver(), transactionsPage.downloadButton);
+        transactionsPage.downloadButton.click();
+
         List<List<String>> data = getDataFromTable(Driver.getDriver().findElement(By.xpath("//table[@class='MuiTable-root css-15i8i05-MuiTable-root']")));
-        // Verileri Excel dosyasına yaz
+        // write datas to excel
         writeDataToExcel(data, "generated.csv");
 
     }
@@ -89,14 +92,13 @@ public class testSteps<CSVWriter> {
         List<WebElement> columnNames = Driver.getDriver().findElements(By.xpath("//h6[@class='MuiTypography-root MuiTypography-subtitle2 css-m09714-MuiTypography-root']"));
         List<WebElement> rows = table.findElements(By.tagName("tr"));
 
-        // Kolon adlarını içeren satırı ekle
+
         List<String> headerRowData = new ArrayList<>();
         for (WebElement columnName : columnNames) {
             headerRowData.add(columnName.getText());
         }
 
-        // Tablodaki diğer satırları ekle
-        boolean isHeaderAdded = false; // Başlık satırı eklenip eklenmediğini kontrol etmek için
+        boolean isHeaderAdded = false;
         for (WebElement row : rows) {
             List<WebElement> cells = row.findElements(By.tagName("td"));
             List<String> rowData = new ArrayList<>();
@@ -104,19 +106,15 @@ public class testSteps<CSVWriter> {
             for (WebElement cell : cells) {
                 rowData.add(cell.getText());
             }
-
             if (!isHeaderAdded && !rowData.isEmpty()) {
-                // İlk satırda boşluk eklenmeyecek
+
                 data.add(headerRowData);
                 isHeaderAdded = true;
             }
-
-            // Boş satırları eklememe kontrolü
             if (rowData.size() > 0) {
                 data.add(rowData);
             }
         }
-
         return data;
     }
 
@@ -138,20 +136,15 @@ public class testSteps<CSVWriter> {
 
             try (FileOutputStream fileOut = new FileOutputStream(outputPath)) {
                 workbook.write(fileOut);
-                System.out.println("Veriler başarıyla Excel dosyasına yazıldı.");
+                System.out.println("Data was successfully written to a CSV file.");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-
-
     @Given("Closes the page.")
-    public void closes_the_page() {
-
-    }
+    public void closes_the_page() { Driver.closeDriver(); }
 
 }
 
